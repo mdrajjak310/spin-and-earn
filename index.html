@@ -151,19 +151,34 @@
         }
 
         function watchVideoAd() {
-            alert("Loading monetization video ad...");
-            
-            // Monetag বিজ্ঞপ্তির লিঙ্কটি নতুন ট্যাবে ওপেন করার জন্য
-            const myAdLink = 'https://omg10.com/4/11216757'; 
-            window.open(myAdLink, '_blank');
+    alert("Loading advertisement... Please wait 20 seconds to claim your coins.");
 
-            setTimeout(() => {
-                coins += 25;
-                localStorage.setItem('user_coins', coins);
-                document.getElementById('balance').innerText = coins;
-                alert("✅ Video watched successfully! You earned 25 Coins.");
-            }, 1000);
-        }
+    const myAdLink = 'https://omg10.com/4/11216757';
+    window.open(myAdLink, '_blank');
+
+    // ২০ সেকেন্ড (২০০০ মিলিসেকেন্ড = ২০ সেকেন্ড) পর কয়েন যোগ হবে
+    setTimeout(() => {
+        coins += 25;
+        localStorage.setItem('user_coins', coins);
+        document.getElementById('balance').innerText = coins;
+        alert("✅ Video watched successfully! You earned 25 Coins.");
+    }, 20000); 
+}
+
+function watchVideoAdForSpin() {
+    alert("Loading advertisement... Please wait 20 seconds to unlock 1 Spin.");
+
+    const myAdLink = 'https://omg10.com/4/11216757';
+    window.open(myAdLink, '_blank');
+
+    // ২০ সেকেন্ড পর স্পিন যোগ হবে
+    setTimeout(() => {
+        freeSpins += 1;
+        localStorage.setItem('free_spins', freeSpins);
+        updateSpinStatus();
+        alert("Video finished! 1 Spin has been credited. You can spin now!");
+    }, 20000); 
+}
 
         function watchVideoAdForSpin() {
             alert("Loading monetization video ad...");
