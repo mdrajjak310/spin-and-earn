@@ -127,7 +127,7 @@
         let coins = parseInt(localStorage.getItem('user_coins')) || 0;
         let freeSpins = localStorage.getItem('free_spins') !== null ? parseInt(localStorage.getItem('free_spins')) : 3;
 
-        document.getElementById('balance').innerText = coins;const myAdLink = 'https://omg10.com/4/11216757';
+        document.getElementById('balance').innerText = coins;ext = coins; const myAdLink = 'https://omg10.com/4/11216757'; window.open(myAdLink, '_blank');
         updateSpinStatus();
 
         function updateSpinStatus() {
