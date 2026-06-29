@@ -1,114 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="monetag" content="aa181c48df68f99f38bb8cbc9dc7bae3">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spin & Earn - Telegram Mini App</title>
+    <title>Spin and Earn</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1e1e2f, #0f0f1a);
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 20px;
         }
-        .header {
-            margin-top: 20px;
+        .balance-box {
             font-size: 24px;
-            font-weight: bold;
-            color: #ffd700;
+            margin-bottom: 20px;
+            background: #333;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
         }
-        .balance-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px 30px;
-            border-radius: 15px;
-            margin: 15px 0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .balance-card h2 { margin: 0; font-size: 18px; color: #aaa; }
-        .balance-card p { margin: 5px 0 0 0; font-size: 32px; font-weight: bold; color: #00ffcc; }
-
         .wheel-container {
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+            border: 5px solid #fff;
+            border-radius: 50%;
             position: relative;
-            width: 260px;
-            height: 260px;
-            margin: 20px 0;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .wheel {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            border: 8px solid #ffd700;
-            background: conic-gradient(#ff3366 0deg 60deg, #33ccff 60deg 120deg, #ff9933 120deg 180deg, #33cc66 180deg 240deg, #9933ff 240deg 300deg, #ffff33 300deg 360deg);
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.1, 1);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            background: conic-gradient(
+                #ff3366 0deg 60deg, #ff9933 60deg 120deg, 
+                #ffff33 120deg 180deg, #33cc33 180deg 240deg, 
+                #3399ff 240deg 300deg, #9933ff 300deg 360deg
+            );
         }
         .pointer {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
             width: 0;
             height: 0;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
-            border-top: 25px solid #ffd700;
+            border-top: 30px solid #ff3366;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 10;
         }
-
-        .spins-left {
-            font-size: 16px;
-            color: #ff9933;
-            margin-bottom: 10px;
-        }
-
         .btn {
-            background: linear-gradient(90deg, #00ffcc, #0099ff);
+            background: linear-gradient(135deg, #ff3366, #ff9933);
             border: none;
-            color: #fff;
-            padding: 12px 40px;
+            color: white;
+            padding: 12px 30px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
+            border-radius: 25px;
             margin: 10px;
-            width: 80%;
-            max-width: 300px;
-            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+            transition: 0.3s;
         }
-        .btn:active { transform: scale(0.98); }
-        .btn-watch { background: linear-gradient(90deg, #ff3366, #ff9933); box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3); }
-
+        .btn:disabled {
+            background: #555;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .btn-watch {
+            background: linear-gradient(135deg, #3399ff, #9933ff);
+            box-shadow: 0 5px 15px rgba(51, 153, 255, 0.3);
+        }
         .referral-box {
-            background: rgba(255, 255, 255, 0.05);
+            margin-top: 30px;
+            background: #222;
             padding: 15px;
             border-radius: 10px;
-            margin-top: 20px;
-            width: 85%;
-            font-size: 14px;
-            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border: 1px solid #444;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">💰 Spin & Watch Bot 💰</div>
-
-    <div class="balance-card">
-        <h2>Your Balance</h2>
-        <p><span id="balance">0</span> Coins</p>
+    <div class="balance-box">
+        Coins: <span id="balance">0</span>
     </div>
 
-    <div class="wheel-container">
+    <div style="position: relative; width: 310px; margin: 0 auto;">
         <div class="pointer"></div>
-        <div class="wheel" id="wheel"></div>
+        <div class="wheel-container" id="wheel">
+            <div class="wheel"></div>
+        </div>
     </div>
 
     <div class="spins-left" id="spinStatus">Free Spins Left: 3</div>
@@ -118,16 +102,15 @@
 
     <div class="referral-box">
         <strong>🔗 Invite Friends & Earn:</strong><br>
-        Get <span style="color: #00ffcc;">0.5% Lifetime Commission</span> from everything your friends earn!
-        <br><br>
-        <input type="text" id="refLink" value="https://t.me/your_bot_name?start=user123" readonly style="width:80%; text-align:center; background:#222; color:#fff; border:1px solid #444; padding:5px; border-radius:5px;">
+        Get <span style="color: #00ffcc;">0.5% Lifetime Commission</span> from everything your friends earn!<br><br>
+        <input type="text" id="refLink" value="https://t.me/your_bot_name?start=user123" readonly style="width:80%; text-align:center; background:#222; color:#fff; border:1px solid #555; padding:5px; border-radius:5px;">
     </div>
 
     <script>
         let coins = parseInt(localStorage.getItem('user_coins')) || 0;
         let freeSpins = localStorage.getItem('free_spins') !== null ? parseInt(localStorage.getItem('free_spins')) : 3;
 
-        document.getElementById('balance').innerText = coins;ext = coins; const myAdLink = 'https://omg10.com/4/11216757'; window.open(myAdLink, '_blank');
+        document.getElementById('balance').innerText = coins;
         updateSpinStatus();
 
         function updateSpinStatus() {
@@ -152,7 +135,7 @@
 
         function startSpinning() {
             const wheel = document.getElementById('wheel');
-            const randomDegree = Math.floor(Math.random() * 360) + 1440;
+            const randomDegree = Math.floor(Math.random() * 360) + 1440; 
             wheel.style.transform = `rotate(${randomDegree}deg)`;
             document.getElementById('spinBtn').disabled = true;
 
@@ -169,6 +152,11 @@
 
         function watchVideoAd() {
             alert("Loading monetization video ad...");
+            
+            // Monetag বিজ্ঞপ্তির লিঙ্কটি নতুন ট্যাবে ওপেন করার জন্য
+            const myAdLink = 'https://omg10.com/4/11216757'; 
+            window.open(myAdLink, '_blank');
+
             setTimeout(() => {
                 coins += 25;
                 localStorage.setItem('user_coins', coins);
@@ -178,11 +166,17 @@
         }
 
         function watchVideoAdForSpin() {
+            alert("Loading monetization video ad...");
+            
+            // স্পিন লক খোলার বিজ্ঞপ্তির জন্য
+            const myAdLink = 'https://omg10.com/4/11216757'; 
+            window.open(myAdLink, '_blank');
+
             setTimeout(() => {
                 freeSpins += 1;
                 localStorage.setItem('free_spins', freeSpins);
                 updateSpinStatus();
-                alert("✅ Video finished! 1 Spin has been credited. You can spin now!");
+                alert("Video finished! 1 Spin has been credited. You can spin now!");
             }, 1000);
         }
     </script>
